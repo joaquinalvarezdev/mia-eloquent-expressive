@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mobileia\\Expressive\\Database": "src/"
+            "Mobileia\\Expressive\\Database\\": "src/"
         }
     }
 }
