@@ -125,7 +125,7 @@ class Configure
         $ord = $handler->getParam($request, 'ord', '');
         $asc = $handler->getParam($request, 'asc', 1);
         if($ord != ''){
-            $this->order[] = array('column' => $ord, 'direction' => $asc == 1 ? 'asc' : 'desc');
+            $this->order[] = array('column' => $ord, 'direction' => $asc == 0 ? 'asc' : 'desc');
         }
         // Procesar numero de pagina
         $this->page = $handler->getParam($request, 'page', 1);
