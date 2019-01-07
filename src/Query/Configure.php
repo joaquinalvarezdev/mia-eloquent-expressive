@@ -57,8 +57,12 @@ class Configure
     {
         // Configuramos los Wheres
         foreach($this->where as $where){
-            if(array_key_exists('in', $where)){
+            if(array_key_exists('date', $where)){
+                $query->whereRaw('DATE('.$where['key'].') = DATE(\'' . $where['value'] . '\')');
+            }else if(array_key_exists('in', $where)){
                 $query->whereIn($where['key'], $where['value']);
+            }else if(array_key_exists('like', $where)){
+                $query->where($where['key'], 'like', '%'.$where['value'].'%');
             }else{
                 $query->where($where['key'], '=', $where['value']);
             }
@@ -154,6 +158,10 @@ class Configure
                 continue;
             }else if($count == 3 && $d[1] == 'in'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => explode(',', $d[2]));
+            }else if($count == 3 && $d[1] == 'like'){
+                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
+            }else if($count == 3 && $d[1] == 'date'){
+                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else if($count == 3){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else{
