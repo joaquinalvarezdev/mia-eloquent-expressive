@@ -82,6 +82,15 @@ class Configure
         $this->where[] = array('key' => $key, 'value' => $value);
     }
     /**
+     * Agregar un whereIn a la query
+     * @param string $key
+     * @param array $value
+     */
+    public function addWhereIn($key, $value)
+    {
+        $this->where[] = array('key' => $key, 'value' => $value, 'in' => true);
+    }
+    /**
      * Determina si la configuración tiene un orden para la Query
      * @return boolean
      */
