@@ -48,7 +48,7 @@ class CacheInterRepository
         $row = new \Mobileia\Expressive\Database\Model\CacheInter();
         $row->key_name = $key;
         $row->data = $value;
-        $row->expires = DB::raw('DATE_ADD(NOW(), INTERVAL 1 DAYS)');
+        $row->expires = DB::raw('DATE_ADD(NOW(), INTERVAL 1 DAY)');
         $row->save();
     }
 }
