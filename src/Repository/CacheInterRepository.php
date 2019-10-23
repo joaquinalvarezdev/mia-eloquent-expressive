@@ -29,10 +29,7 @@ class CacheInterRepository
      */
     public static function get($key)
     {
-        $row = \Mobileia\Expressive\Database\Model\CacheInter::
-                where('key_name', $key)
-                ->where('expires', '>=', 'NOW()')
-                ->first();
+        $row = self::getIntern($key);
         if($row === null){
             return null;
         }
@@ -41,11 +38,26 @@ class CacheInterRepository
     /**
      * 
      * @param string $key
+     * @return CacheIntern|null
+     */
+    public static function getIntern($key)
+    {
+        return \Mobileia\Expressive\Database\Model\CacheInter::
+                where('key_name', $key)
+                ->whereRaw('expires >= NOW()')
+                ->first();
+    }
+    /**
+     * 
+     * @param string $key
      * @param array $value
      */
     public static function set($key, array $value)
     {
-        $row = new \Mobileia\Expressive\Database\Model\CacheInter();
+        $row = self::getIntern($key);
+        if($row === null){
+            $row = new \Mobileia\Expressive\Database\Model\CacheInter();
+        }
         $row->key_name = $key;
         $row->data = $value;
         $row->expires = DB::raw('DATE_ADD(NOW(), INTERVAL 1 DAY)');
