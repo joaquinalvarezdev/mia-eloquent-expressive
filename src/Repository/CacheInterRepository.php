@@ -63,4 +63,16 @@ class CacheInterRepository
         $row->expires = DB::raw('DATE_ADD(NOW(), INTERVAL 1 DAY)');
         $row->save();
     }
+    /**
+     * 
+     * @param string $key
+     */
+    public static function remove($key)
+    {
+        $row = self::getIntern($key);
+        if($row === null){
+            return false;
+        }
+        $row->delete();
+    }
 }
