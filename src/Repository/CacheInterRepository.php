@@ -54,7 +54,9 @@ class CacheInterRepository
      */
     public static function set($key, array $value)
     {
-        $row = self::getIntern($key);
+        $row = \Mobileia\Expressive\Database\Model\CacheInter::
+                where('key_name', $key)
+                ->first();
         if($row === null){
             $row = new \Mobileia\Expressive\Database\Model\CacheInter();
         }
