@@ -77,4 +77,15 @@ class CacheInterRepository
         }
         $row->delete();
     }
+    
+    /**
+     * 
+     * @param string $key
+     */
+    public static function removeLike($key)
+    {
+        return \Mobileia\Expressive\Database\Model\CacheInter::
+                where('key_name', 'like', '%'.$key.'%')
+                ->delete();
+    }
 }
