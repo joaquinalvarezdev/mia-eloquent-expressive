@@ -61,6 +61,8 @@ class Configure
                 $query->whereRaw('DATE('.$where['key'].') = DATE(\'' . $where['value'] . '\')');
             }else if(array_key_exists('in', $where)){
                 $query->whereIn($where['key'], $where['value']);
+            }else if(array_key_exists('notin', $where)){
+                $query->whereNotIn($where['key'], $where['value']);
             }else if(array_key_exists('like', $where)){
                 $query->where($where['key'], 'like', '%'.$where['value'].'%');
             }else{
@@ -89,6 +91,15 @@ class Configure
     public function addWhereIn($key, $value)
     {
         $this->where[] = array('key' => $key, 'value' => $value, 'in' => true);
+    }
+    /**
+     * Agregar un whereIn a la query
+     * @param string $key
+     * @param array $value
+     */
+    public function addWhereNotIn($key, $value)
+    {
+        $this->where[] = array('key' => $key, 'value' => $value, 'notin' => true);
     }
     /**
      * Determina si la configuración tiene un orden para la Query
@@ -166,6 +177,8 @@ class Configure
             if($count <= 1){
                 continue;
             }else if($count == 3 && $d[1] == 'in'){
+                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => explode(',', $d[2]));
+            }else if($count == 3 && $d[1] == 'notin'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => explode(',', $d[2]));
             }else if($count == 3 && $d[1] == 'like'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
