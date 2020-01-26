@@ -65,6 +65,8 @@ class Configure
                 $query->whereNotIn($where['key'], $where['value']);
             }else if(array_key_exists('like', $where)){
                 $query->where($where['key'], 'like', '%'.$where['value'].'%');
+            }else if(array_key_exists('between', $where)){
+                $query->whereBetween($where['key'], [$where['from'], $where['to']]);
             }else{
                 $query->where($where['key'], '=', $where['value']);
             }
@@ -100,6 +102,15 @@ class Configure
     public function addWhereNotIn($key, $value)
     {
         $this->where[] = array('key' => $key, 'value' => $value, 'notin' => true);
+    }
+    /**
+     * Agregar un whereIn a la query
+     * @param string $key
+     * @param array $value
+     */
+    public function addWhereBetween($key, $from, $to)
+    {
+        $this->where[] = array('key' => $key, 'from' => $from, 'to' => $to, 'between' => true);
     }
     /**
      * Determina si la configuración tiene un orden para la Query
@@ -184,6 +195,8 @@ class Configure
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else if($count == 3 && $d[1] == 'date'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
+            }else if($count == 4 && $d[1] == 'between'){
+                $this->where[] = array('key' => $d[0], $d[1] => true, 'from' => $d[2], 'to' => $d[3]);
             }else if($count == 3){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else{
