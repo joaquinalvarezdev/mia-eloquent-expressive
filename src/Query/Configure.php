@@ -34,6 +34,11 @@ class Configure
      * @var int
      */
     protected $limit = 50;
+    /**
+     * Desactivar orden para manejarlo manualmente
+     * @var boolean
+     */
+    public $deactivateOrder = false;
     
     /**
      * Constructor que permite enviar Handler y Request para obtener los parametros
@@ -72,7 +77,7 @@ class Configure
             }
         }
         // Configuramos orden
-        if($this->hasOrder()){
+        if($this->hasOrder() && !$this->deactivateOrder){
             $query->orderBy($this->order[0]['column'], $this->order[0]['direction']);
         }
     }
@@ -146,6 +151,14 @@ class Configure
     public function getLimit()
     {
         return $this->limit;
+    }
+    /**
+     * 
+     * @return array
+     */
+    public function getOrders()
+    {
+        return $this->order;
     }
     /**
      * Procesa los parametros enviados en la petición para incluirlos en la query
