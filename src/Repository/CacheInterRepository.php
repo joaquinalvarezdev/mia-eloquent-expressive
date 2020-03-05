@@ -71,11 +71,9 @@ class CacheInterRepository
      */
     public static function remove($key)
     {
-        $row = self::getIntern($key);
-        if($row === null){
-            return false;
-        }
-        $row->delete();
+        return \Mobileia\Expressive\Database\Model\CacheInter::
+                where('key_name', $key)
+                ->delete();
     }
     
     /**
