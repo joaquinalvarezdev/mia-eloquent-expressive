@@ -54,6 +54,16 @@ class CacheInterRepository
      */
     public static function set($key, array $value)
     {
+        self::setWithDays($key, $value, 3);
+    }
+    /**
+     * Guardar configurando los dias de cache
+     * @param string $key
+     * @param array $value
+     * @param int $days
+     */
+    public static function setWithDays($key, array $value, $days = 1)
+    {
         $row = \Mobileia\Expressive\Database\Model\CacheInter::
                 where('key_name', $key)
                 ->first();
@@ -62,7 +72,7 @@ class CacheInterRepository
         }
         $row->key_name = $key;
         $row->data = $value;
-        $row->expires = DB::raw('DATE_ADD(NOW(), INTERVAL 1 DAY)');
+        $row->expires = DB::raw('DATE_ADD(NOW(), INTERVAL ' . $days . ' DAY)');
         $row->save();
     }
     /**

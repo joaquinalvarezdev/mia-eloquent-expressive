@@ -1,7 +1,7 @@
 {
     "name": "mobileia/mia-eloquent-expressive",
     "description": "The library for Zend Expressive 3",
-    "version": "0.0.17",
+    "version": "0.0.18",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [{
