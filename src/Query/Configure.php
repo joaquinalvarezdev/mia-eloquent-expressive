@@ -118,6 +118,14 @@ class Configure
         $this->where[] = array('key' => $key, 'from' => $from, 'to' => $to, 'between' => true);
     }
     /**
+     * Elimina un where del listado
+     * @param string $key
+     */
+    public function removeWhere($key)
+    {
+        unset($this->where[$key]);
+    }
+    /**
      * Determina si la configuración tiene un orden para la Query
      * @return boolean
      */
@@ -159,6 +167,14 @@ class Configure
     public function getOrders()
     {
         return $this->order;
+    }
+    /**
+     * 
+     * @return array
+     */
+    public function getWheres()
+    {
+        return $this->where;
     }
     /**
      * Procesa los parametros enviados en la petición para incluirlos en la query
