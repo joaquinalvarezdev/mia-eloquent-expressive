@@ -123,7 +123,15 @@ class Configure
      */
     public function removeWhere($key)
     {
-        unset($this->where[$key]);
+        for ($i = 0; $i < count($this->where); $i++) {
+            
+            if($this->where[$i]['key'] != $key){
+                continue;
+            }
+            
+            unset($this->where[$i]);
+            break;
+        }
     }
     /**
      * Determina si la configuración tiene un orden para la Query
@@ -167,6 +175,21 @@ class Configure
     public function getOrders()
     {
         return $this->order;
+    }
+    /**
+     * 
+     * @param string $key
+     * @return arary|null
+     */
+    public function getWhere($key)
+    {
+        for ($i = 0; $i < count($this->where); $i++) {  
+            if($this->where[$i]['key'] == $key){
+                return $this->where[$i];
+            }
+        }
+        
+        return null;
     }
     /**
      * 
