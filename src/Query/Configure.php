@@ -25,6 +25,11 @@ class Configure
      */
     protected $where = array();
     /**
+     * Almacena las relaciones
+     * @var array
+     */
+    protected $withs = array();
+    /**
      * Almacena el campo de busqueda
      * @var string
      */
@@ -80,6 +85,8 @@ class Configure
         if($this->hasOrder() && !$this->deactivateOrder){
             $query->orderBy($this->order[0]['column'], $this->order[0]['direction']);
         }
+        // Configuramos Relaciones
+        $query->with($this->withs);
     }
     /**
      * Agregar un where a la query
@@ -222,6 +229,8 @@ class Configure
         $this->search = $handler->getParam($request, 'search', '');
         // Procesar campo limite
         $this->limit = $handler->getParam($request, 'limit', 50);
+        // Procesar relaciones
+        $this->withs = $handler->getParam($request, 'withs', []);
     }
     /**
      * Procesa los wheres enviados en la petición
