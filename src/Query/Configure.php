@@ -69,6 +69,10 @@ class Configure
         foreach($this->where as $where){
             if(array_key_exists('date', $where)){
                 $query->whereRaw('DATE('.$where['key'].') = DATE(\'' . $where['value'] . '\')');
+            }else if(array_key_exists('month', $where)){
+                $query->whereRaw('MONTH('.$where['key'].') = ' . $where['value']);
+            }else if(array_key_exists('year', $where)){
+                $query->whereRaw('YEAR('.$where['key'].') = ' . $where['value']);
             }else if(array_key_exists('in', $where)){
                 $query->whereIn($where['key'], $where['value']);
             }else if(array_key_exists('notin', $where)){
@@ -262,6 +266,10 @@ class Configure
             }else if($count == 3 && $d[1] == 'like'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else if($count == 3 && $d[1] == 'date'){
+                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
+            }else if($count == 3 && $d[1] == 'month'){
+                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
+            }else if($count == 3 && $d[1] == 'year'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else if($count == 4 && $d[1] == 'between'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'from' => $d[2], 'to' => $d[3]);
