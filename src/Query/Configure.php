@@ -69,10 +69,6 @@ class Configure
         foreach($this->where as $where){
             if(array_key_exists('date', $where)){
                 $query->whereRaw('DATE('.$where['key'].') = DATE(\'' . $where['value'] . '\')');
-            }else if(array_key_exists('month', $where)){
-                $query->whereRaw('MONTH('.$where['key'].') = ' . $where['value']);
-            }else if(array_key_exists('year', $where)){
-                $query->whereRaw('YEAR('.$where['key'].') = ' . $where['value']);
             }else if(array_key_exists('in', $where)){
                 $query->whereIn($where['key'], $where['value']);
             }else if(array_key_exists('notin', $where)){
@@ -86,10 +82,7 @@ class Configure
             }
         }
         // Configuramos orden
-        if($this->hasOrder() && $this->order[0]['column'] == 'nearby'){
-            $query->addSelect(DB::raw("6371 * acos(cos(radians(" . $this->order[0]['latitude'] . ")) * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $this->order[0]['longitude'] . ")) + sin(radians(" .$this->order[0]['latitude']. ")) * sin(radians(latitude))) AS distance"));
-            $query->orderBy('distance', $this->order[0]['direction']);
-        }else if($this->hasOrder() && !$this->deactivateOrder){
+        if($this->hasOrder() && !$this->deactivateOrder){
             $query->orderBy($this->order[0]['column'], $this->order[0]['direction']);
         }
         // Configuramos Relaciones
@@ -138,14 +131,17 @@ class Configure
     public function removeWhere($key)
     {
         for ($i = 0; $i < count($this->where); $i++) {
-            
-            if($this->where[$i]['key'] != $key){
+            if(!isset($this->where[$i])){
+                continue;
+            }
+
+            if($this->where[$i]['key'] != $key ){
                 continue;
             }
             
             unset($this->where[$i]);
             break;
-        }
+        }   
     }
     /**
      * Determina si la configuración tiene un orden para la Query
@@ -198,6 +194,9 @@ class Configure
     public function getWhere($key)
     {
         for ($i = 0; $i < count($this->where); $i++) {  
+            if(!isset($this->where[$i])){
+                continue;
+            }
             if($this->where[$i]['key'] == $key){
                 return $this->where[$i];
             }
@@ -225,11 +224,7 @@ class Configure
         // Procesar orden de la Query
         $ord = $handler->getParam($request, 'ord', '');
         $asc = $handler->getParam($request, 'asc', 1);
-        if($ord != '' && $ord == 'nearby'){
-            $latitude = $handler->getParam($request, 'latitude', 0);
-            $longitude = $handler->getParam($request, 'longitude', 0);
-            $this->order[] = array('column' => 'nearby', 'direction' => $asc == 0 ? 'asc' : 'desc', 'latitude' => $latitude, 'longitude' => $longitude);
-        }else if($ord != ''){
+        if($ord != ''){
             $this->order[] = array('column' => $ord, 'direction' => $asc == 0 ? 'asc' : 'desc');
         }
         // Procesar numero de pagina
@@ -266,10 +261,6 @@ class Configure
             }else if($count == 3 && $d[1] == 'like'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else if($count == 3 && $d[1] == 'date'){
-                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
-            }else if($count == 3 && $d[1] == 'month'){
-                $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
-            }else if($count == 3 && $d[1] == 'year'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'value' => $d[2]);
             }else if($count == 4 && $d[1] == 'between'){
                 $this->where[] = array('key' => $d[0], $d[1] => true, 'from' => $d[2], 'to' => $d[3]);
